@@ -1,11 +1,14 @@
 import axios from 'axios';
 import store from '../store';
+
+// axios.defaults.baseURL = process.env.VUE_APP_BASE_API_URL;
+
 /* eslint-disable no-console */
 function parseError(error) {
   if (error.response.data.error === 'token_expired') {
-    const user = store.getters['account/getUser'];
+    const user = store.getters['auth/getUser'];
     if (user && !user.remember) {
-      store.dispatch('account/logout');
+      store.dispatch('auth/logout');
     }
   }
   return error;
@@ -19,7 +22,7 @@ function parseBody(response) {
 }
 
 const http = axios.create({
-  baseURL: process.env.VUE_APP_API_URL,
+  baseURL: process.env.VUE_APP_BASE_API_URL,
   crossdomain: true,
   headers: {
     Accept: 'application/json',
@@ -30,7 +33,7 @@ const http = axios.create({
 http.interceptors.request.use(
   (config) => {
     const apiConfig = config;
-    const token = store.getters['account/getToken'];
+    const token = store.getters['auth/getToken'];
     if (token) {
       apiConfig.headers.Authorization = `Bearer ${token}`;
     }

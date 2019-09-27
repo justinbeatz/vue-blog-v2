@@ -1,3 +1,10 @@
 {
-    "users": []
+  "users": [
+    {
+      "email": "andrew.ortega@gmail.com",
+      "password": "$2a$10$sqTbfF/seP.auUobEYdh/u2/GqLvzgjwuAUCtVu9qRTlwBI3EUg.W",
+      "id": 1
+    }
+  ],
+  "newsfeed": []
 }

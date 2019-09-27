@@ -1,31 +1,30 @@
-import api from './api';
+import axios from '../config/axios';
 
 export default {
   login(params) {
-    return api.post('/signIn', {
+    return axios.post('/signin', {
       email: params.username,
       password: params.password,
       remember: params.remember,
     });
   },
   logout(params) {
-    return api.post('/signOut', {
+    return axios.post('/signOut', {
       remember_token: params.rememberToken,
       token: params.token,
     });
   },
   register(params) {
-    return api.post('/signup', {
+    return axios.post('/register', {
       email: params.username,
       password: params.password,
-      password_confirmation: params.passwordConfirmation,
     });
   },
   getProfile() {
-    return api.get('/profiles');
+    return axios.get('/profiles');
   },
   updateProfile(params) {
-    return api.put('/profiles', {
+    return axios.put('/profiles', {
       first_name: params.firstname,
       last_name: params.lastname,
       bio: params.bio,
@@ -33,15 +32,15 @@ export default {
     });
   },
   feed() {
-    return api.get('/newsfeed');
+    return axios.get('/newsfeed');
   },
   getPost(params) {
-    return api.get(`/getpost/${params.id}`);
+    return axios.get(`/getpost/${params.id}`);
   },
   newPost(params) {
     /* eslint-disable no-console */
     console.log(params.userid);
-    return api.post('/posts', {
+    return axios.post('/posts', {
       title: params.title,
       content: params.content,
       user_id: params.userid,

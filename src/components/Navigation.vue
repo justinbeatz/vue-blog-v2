@@ -42,13 +42,59 @@
 </template>
 
 <script>
+import { mapState, mapActions, mapGetters } from 'vuex';
+
 export default {
   name: 'Navigation',
   data() {
     return {
       links: [],
-      userId: '',
+      userid: '',
     };
+  },
+  computed: {
+    ...mapState('blog', {
+      blogpost: 'blogpost',
+      blogsearch: 'blogsearch',
+    }),
+    ...mapGetters('auth', {
+      userIn: 'getLoggedIn',
+      token: 'getToken',
+      user: 'getUser',
+    }),
+    ...mapActions({
+      togglePost: 'blog/toggleBlogPost',
+      toggleSearch: 'blog/toggleBlogSearch',
+    }),
+    loggedIn() {
+      return this.userIn;
+    },
+    userId() {
+      return this.user ? this.user.id : null;
+    },
+  },
+  watch: {
+    $route(to, from) {
+      /* eslint-disable no-console */
+      if (from.name === 'BlogFeed' && to.name === 'BlogPost') {
+        this.$store.dispatch('blog/toggleBlogPost', true);
+      } else if (from.name === 'BlogPost' && to.name === 'BlogFeed') {
+        this.$store.dispatch('blog/toggleBlogPost', false);
+      }
+    },
+  },
+  methods: {
+    goList(from) {
+      if (from === 'post') {
+        this.togglePost(true);
+      } else if (from === 'search') {
+        this.toggleSearch(true);
+      }
+    },
+    logOut() {
+      this.$store.dispatch('auth/logout');
+      this.$router.push('/');
+    },
   },
 };
 </script>

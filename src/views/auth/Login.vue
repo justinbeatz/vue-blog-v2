@@ -49,10 +49,10 @@ export default {
     };
   },
   computed: {
-    ...mapState('account', ['status']),
+    ...mapState('auth', ['status']),
   },
   methods: {
-    ...mapActions('account', ['login', 'logout']),
+    ...mapActions('auth', ['login', 'logout']),
     handleSubmit() {
       this.submitted = true;
       const { username, password, remember } = this;

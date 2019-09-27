@@ -4,14 +4,9 @@
             <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
                 <div class="card card-signin my-5">
                     <div class="card-body">
+                      <ValidationObserver v-slot="{ invalid, passes }">
                         <h5 class="card-title text-center">Register</h5>
-                        <form class="form-signin" @submit.prevent="handleSubmit">
-                        <!-- <div class="form-label-group">
-                            <input type="email" id="inputEmail" class="form-control"
-                             placeholder="Email address" v-model="user.username" required autofocus>
-                            <div v-if="submitted && errors.has('username')"
-                            class="invalid-feedback">{{ errors.first('username') }}</div>
-                        </div> -->
+                        <form class="form-signin" @submit.prevent="passes(handleSubmit)">
 
                         <ValidationProvider name="email" rules="required|email">
                             <div slot-scope="{ errors }" class="form-label-group">
@@ -20,53 +15,31 @@
                                 <p>{{ errors[0] }}</p>
                             </div>
                         </ValidationProvider>
-
-                        <!-- <div class="form-label-group">
-                            <input type="password" v-model="user.password" placeholder="Password"
-                            v-validate="{ required: true, min: 6 }" name="password"
-                            class="form-control" :class="{ 'is-invalid':
-                            submitted && errors.has('password') }" />
-                            <div v-if="submitted && errors.has('password')"
-                            class="invalid-feedback">{{ errors.first('password') }}</div>
-                        </div> -->
-
-
-                        <!-- <div class="form-label-group">
-                            <input type="password" placeholder="Password Confirmation"
-                            v-model="user.passwordConfirmation"
-                            v-validate="{ required: true, min: 6 }" name="password-confirmation"
-                            class="form-control" :class="{ 'is-invalid':
-                            submitted && errors.has('password-confirmation') }" />
-                            <div v-if="submitted && errors.has('password-confirmation')"
-                            class="invalid-feedback">{{ errors.first('password-confirmation') }}
+                        <ValidationProvider name="password"
+                        rules="required|password:confirmation">
+                            <div slot-scope="{ errors }" class="form-label-group">
+                            <input type="password" class="form-control"
+                                v-model="user.password" placeholder="Password" >
+                                <p>{{ errors[0] }}</p>
                             </div>
-                        </div> -->
-                        <ValidationObserver>
-                            <ValidationProvider name="password"
-                            rules="required|password:confirmation">
-                                <div slot-scope="{ errors }" class="form-label-group">
-                                <input type="password" class="form-control"
-                                    v-model="user.password" placeholder="Password" >
-                                    <p>{{ errors[0] }}</p>
-                                </div>
-                            </ValidationProvider>
+                        </ValidationProvider>
 
-                            <ValidationProvider name="confirmation" rules="required">
-                                <div slot-scope="{ errors }" class="form-label-group">
-                                <input type="password" class="form-control"
-                                    v-model="user.passwordConfirmation"
-                                    placeholder="Password Confirmation">
-                                    <p>{{ errors[0] }}</p>
-                                </div>
-                            </ValidationProvider>
-                        </ValidationObserver>
+                        <ValidationProvider name="confirmation" rules="required">
+                            <div slot-scope="{ errors }" class="form-label-group">
+                            <input type="password" class="form-control"
+                                v-model="user.passwordConfirmation"
+                                placeholder="Password Confirmation">
+                                <p>{{ errors[0] }}</p>
+                            </div>
+                        </ValidationProvider>
 
                         <div class="custom-control custom-checkbox mb-3">
                         </div>
                         <button class="btn btn-lg btn-primary btn-block text-uppercase"
-                        type="submit">Register</button>
+                        type="submit" :disabled="invalid">Register</button>
                          <router-link to="/login" class="btn btn-link">Login</router-link>
                         </form>
+                      </ValidationObserver>
                     </div>
                 </div>
             </div>
@@ -105,16 +78,12 @@ export default {
   },
   computed: {
     ...mapState('auth', ['status']),
-    methods: {
-      ...mapActions('auth', ['register']),
-      handleSubmit() {
-        this.submitted = true;
-        this.$validator.validate().then((valid) => {
-          if (valid) {
-            this.register(this.user);
-          }
-        });
-      },
+  },
+  methods: {
+    ...mapActions('auth', ['register']),
+    handleSubmit() {
+      this.submitted = true;
+      this.register(this.user);
     },
   },
 };

@@ -4,8 +4,8 @@
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link>
     </div> -->
-    <router-view/>
     <Navigation></Navigation>
+    <router-view/>
   </div>
 </template>
 
@@ -37,5 +37,8 @@ export default {
       color: #42b983;
     }
   }
+}
+nav + div {
+  margin-top: 50px;
 }
 </style>
